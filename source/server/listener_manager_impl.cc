@@ -326,7 +326,7 @@ ListenerManagerStats ListenerManagerImpl::generateStats(Stats::Scope& scope) {
 }
 
 bool ListenerManagerImpl::addOrUpdateListener(const envoy::api::v2::Listener& config,
-                                              bool modifiable) {
+                                              const std::string&, bool modifiable) {
   std::string name;
   if (!config.name().empty()) {
     name = config.name();

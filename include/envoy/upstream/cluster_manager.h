@@ -70,9 +70,12 @@ public:
    *    Nothing is done if the hash matches the previously running configuration.
    * 2) Statically defined clusters (those present when Envoy starts) can not be updated via API.
    *
+   * @param fixfix
+   * @param fixfix
    * @return true if the action results in an add/update of a cluster.
    */
-  virtual bool addOrUpdateCluster(const envoy::api::v2::Cluster& cluster) PURE;
+  virtual bool addOrUpdateCluster(const envoy::api::v2::Cluster& cluster,
+                                  const std::string& version_info) PURE;
 
   /**
    * Set a callback that will be invoked when all owned clusters have been initialized.

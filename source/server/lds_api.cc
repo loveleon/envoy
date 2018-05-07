@@ -40,7 +40,7 @@ void LdsApi::initialize(std::function<void()> callback) {
   subscription_->start({}, *this);
 }
 
-void LdsApi::onConfigUpdate(const ResourceVector& resources, const std::string&) {
+void LdsApi::onConfigUpdate(const ResourceVector& resources, const std::string& version_info) {
   cm_.adsMux().pause(Config::TypeUrl::get().RouteConfiguration);
   Cleanup rds_resume([this] { cm_.adsMux().resume(Config::TypeUrl::get().RouteConfiguration); });
   for (const auto& listener : resources) {
@@ -57,7 +57,7 @@ void LdsApi::onConfigUpdate(const ResourceVector& resources, const std::string&)
     const std::string listener_name = listener.name();
     listeners_to_remove.erase(listener_name);
     try {
-      if (listener_manager_.addOrUpdateListener(listener, true)) {
+      if (listener_manager_.addOrUpdateListener(listener, version_info, true)) {
         ENVOY_LOG(info, "lds: add/update listener '{}'", listener_name);
       } else {
         ENVOY_LOG(debug, "lds: add/update listener '{}' skipped", listener_name);

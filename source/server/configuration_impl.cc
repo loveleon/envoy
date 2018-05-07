@@ -53,7 +53,7 @@ void MainImpl::initialize(const envoy::config::bootstrap::v2::Bootstrap& bootstr
   ENVOY_LOG(info, "loading {} listener(s)", listeners.size());
   for (ssize_t i = 0; i < listeners.size(); i++) {
     ENVOY_LOG(debug, "listener #{}:", i);
-    server.listenerManager().addOrUpdateListener(listeners[i], false);
+    server.listenerManager().addOrUpdateListener(listeners[i], "", false);
   }
 
   if (bootstrap.dynamic_resources().has_lds_config()) {

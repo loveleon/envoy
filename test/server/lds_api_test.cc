@@ -58,12 +58,12 @@ public:
   }
 
   void expectAdd(const std::string& listener_name, bool updated) {
-    EXPECT_CALL(listener_manager_, addOrUpdateListener(_, true))
-        .WillOnce(
-            Invoke([listener_name, updated](const envoy::api::v2::Listener& config, bool) -> bool {
-              EXPECT_EQ(listener_name, config.name());
-              return updated;
-            }));
+    EXPECT_CALL(listener_manager_, addOrUpdateListener(_, _, true)) // fixfix version test?
+        .WillOnce(Invoke([listener_name, updated](const envoy::api::v2::Listener& config,
+                                                  const std::string&, bool) -> bool {
+          EXPECT_EQ(listener_name, config.name());
+          return updated;
+        }));
   }
 
   void expectRequest() {
@@ -164,7 +164,7 @@ TEST_F(LdsApiTest, MisconfiguredListenerNameIsPresentInException) {
 
   EXPECT_CALL(listener_manager_, listeners()).WillOnce(Return(existing_listeners));
 
-  EXPECT_CALL(listener_manager_, addOrUpdateListener(_, true))
+  EXPECT_CALL(listener_manager_, addOrUpdateListener(_, _, true))
       .WillOnce(Throw(EnvoyException("something is wrong")));
 
   EXPECT_THROW_WITH_MESSAGE(lds_->onConfigUpdate(listeners, ""), EnvoyException,

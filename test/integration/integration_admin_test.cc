@@ -263,6 +263,14 @@ TEST_P(IntegrationAdminTest, Admin) {
     EXPECT_EQ(listener_it->get().socket().localAddress()->asString(),
               (*listener_info_it)->asString());
   }
+
+  response = IntegrationUtil::makeSingleRequest(lookupPort("admin"), "GET", "/config_dump", "",
+                                                downstreamProtocol(), version_);
+  EXPECT_TRUE(response->complete());
+  EXPECT_STREQ("200", response->headers().Status()->value().c_str());
+  EXPECT_STREQ("application/json", ContentType(response));
+  json = Json::Factory::loadFromString(response->body());
+  EXPECT_TRUE(json->getObject("configs")->hasObject("bootstrap"));
 }
 
 // Successful call to startProfiler requires tcmalloc.

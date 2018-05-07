@@ -153,7 +153,8 @@ public:
                      Event::Dispatcher& main_thread_dispatcher);
 
   // Upstream::ClusterManager
-  bool addOrUpdateCluster(const envoy::api::v2::Cluster& cluster) override;
+  bool addOrUpdateCluster(const envoy::api::v2::Cluster& cluster,
+                          const std::string& version_info) override;
   void setInitializedCb(std::function<void()> callback) override {
     init_helper_.setInitializedCb(callback);
   }
